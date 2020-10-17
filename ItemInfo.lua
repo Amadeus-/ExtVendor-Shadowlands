@@ -358,24 +358,16 @@ end
 -- the player's current level)
 --========================================
 function ExtVendor_IsOutdatedItemLevel(itemLevel, playerLevel)
-    local i;
-    local itemExpac, playerExpac;
-    for i = #MAX_PLAYER_LEVEL_TABLE, 0, -1 do
-        if (playerLevel <= MAX_PLAYER_LEVEL_TABLE[i]) then
-            playerExpac = i;
-        end
-    end
-    for i = #MAX_PLAYER_LEVEL_TABLE, 0, -1 do
-        if (itemLevel <= MAX_PLAYER_LEVEL_TABLE[i]) then
-            itemExpac = i;
-        end
-    end
+    local playerExpac = GetExpansionForLevel(playerLevel) or GetServerExpansionLevel()
+    local itemExpac = GetExpansionForLevel(itemLevel) or GetServerExpansionLevel()
+    -- ToDo:  test above logic (changes were required for 9.0.1
+
     if (itemExpac > playerExpac) then
-        return false, itemExpac, playerExpac;
+        return false, itemExpac, playerExpac
     elseif (itemExpac < (playerExpac - 1)) then
-        return true, itemExpac, playerExpac;
+        return true, itemExpac, playerExpac
     else
-        return (itemLevel <= playerLevel - 10), itemExpac, playerExpac;
+        return (itemLevel <= playerLevel - 10), itemExpac, playerExpac
     end
 end
 
