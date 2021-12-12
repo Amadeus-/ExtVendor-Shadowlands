@@ -224,7 +224,7 @@ function ExtVendor_QVConfig_Blacklist_Update()
             buttons[i].index = blacklistIndex;
             local displayName = "|cffff0000" .. L["UNKNOWN_ITEM"];
             if (itemName and itemRarity) then
-                displayName = Enum.ItemQuality[itemRarity].hex .. itemName;
+                displayName = ITEM_QUALITY_COLORS[itemRarity].hex .. itemName;
             end
             ExtVendor_ItemListButton_DisplayItem(buttons[i], itemID, itemTexture, displayName, selection);
 			displayedHeight = displayedHeight + buttons[i]:GetHeight();
@@ -259,7 +259,7 @@ function ExtVendor_QVConfig_GlobalWhitelist_Update()
             buttons[i].index = blacklistIndex;
             local displayName = "|cffff0000" .. L["UNKNOWN_ITEM"];
             if (itemName and itemRarity) then
-                displayName = Enum.ItemQuality[itemRarity].hex .. itemName;
+                displayName = ITEM_QUALITY_COLORS[itemRarity].hex .. itemName;
             end
             ExtVendor_ItemListButton_DisplayItem(buttons[i], itemID, itemTexture, displayName, selection);
 			displayedHeight = displayedHeight + buttons[i]:GetHeight();
@@ -294,7 +294,7 @@ function ExtVendor_QVConfig_LocalWhitelist_Update()
             buttons[i].index = blacklistIndex;
             local displayName = "|cffff0000" .. L["UNKNOWN_ITEM"];
             if (itemName and itemRarity) then
-                displayName = Enum.ItemQuality[itemRarity].hex .. itemName;
+                displayName = ITEM_QUALITY_COLORS[itemRarity].hex .. itemName;
             end
             ExtVendor_ItemListButton_DisplayItem(buttons[i], itemID, itemTexture, displayName, selection);
 			displayedHeight = displayedHeight + buttons[i]:GetHeight();
