@@ -1,4 +1,4 @@
-## Interface: 90001
+## Interface: 90105
 ## Title: Extended Vendor UI |cffffffffv1.8.8
 ## Notes: Extends the merchant interface for easier browsing.
 ## Author: Germbread
