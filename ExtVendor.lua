@@ -1105,12 +1105,12 @@ function unpackMerchantItemInfo(info)
     return info.name, info.texture, info.price, info.quantity, info.numAvailable, info.isPurchasable, info.isUsable, info.extendedCost;
 end
 
-function packItemInfo(itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, iconFileDataID, itemSellPrice, itemClassID, itemSubClassID, bindType, expacID, itemSetID, isCraftingReagent)
-    return {itemName = itemName, itemLink = itemLink, itemRarity = itemRarity, itemLevel = itemLevel, itemMinLevel = itemMinLevel, itemType = itemType, itemSubType = itemSubType, itemStackCount = itemStackCount, itemEquipLoc = itemEquipLoc, iconFileDataID = iconFileDataID, itemSellPrice = itemSellPrice, itemClassID = itemClassID, itemSubClassID = itemSubClassID, bindType = bindType, expacID = expacID, itemSetID = itemSetID, isCraftingReagent = isCraftingReagent};
+function packItemInfo(itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, iconFileDataID, itemSellPrice, itemClassId, itemSubClassId, bindType, expacID, itemSetID, isCraftingReagent)
+    return {itemName = itemName, itemLink = itemLink, itemRarity = itemRarity, itemLevel = itemLevel, itemMinLevel = itemMinLevel, itemType = itemType, itemSubType = itemSubType, itemStackCount = itemStackCount, itemEquipLoc = itemEquipLoc, iconFileDataID = iconFileDataID, itemSellPrice = itemSellPrice, itemClassID = itemClassID, itemSubClassId = itemSubClassID, bindType = bindType, expacID = expacID, itemSetID = itemSetID, isCraftingReagent = isCraftingReagent};
 end
 
 function unpackItemInfo(info)
-    return info.itemName, info.itemLink, info.itemRarity, info.itemLevel, info.itemMinLevel, info.itemType, info.itemSubType, info.itemStackCount, info.itemEquipLoc, info.iconFileDataID, info.itemSellPrice, info.itemClassID, info.itemSubClassID, info.bindType, info.expacID, info.itemSetID, info.isCraftingReagent;
+    return info.itemName, info.itemLink, info.itemRarity, info.itemLevel, info.itemMinLevel, info.itemType, info.itemSubType, info.itemStackCount, info.itemEquipLoc, info.iconFileDataID, info.itemSellPrice, info.itemClassId, info.itemSubClassId, info.bindType, info.expacID, info.itemSetID, info.isCraftingReagent;
 end
 
 function packExtItemInfo(isKnown, reqClasses, itemID, isAccountBound)
