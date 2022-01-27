@@ -170,7 +170,7 @@ function ExtVendor_IsItemQuickVendor(bag, bagSlot, link, quality, itemLevel, ite
         return false, nil, "Quality too high";
     end
     -- don't vendor equipment if it's part of an equipment set
-    if ((itemClassId == LE_ITEM_CLASS_ARMOR) or (itemClassId == LE_ITEM_CLASS_WEAPON)) then
+    if ((itemClassId == Enum.ItemClass.Armor) or (itemClassId == Enum.ItemClass.Weapon)) then
         if (ExtVendor_IsItemInEquipmentSet(bag, bagSlot)) then return false, nil, "Part of equipment set"; end
     end
     -- *** Poor (grey) items ***
@@ -180,14 +180,14 @@ function ExtVendor_IsItemQuickVendor(bag, bagSlot, link, quality, itemLevel, ite
     -- *** Common (white) gear ***
     if (EXTVENDOR_DATA['config']['quickvendor_whitegear']) then
         if (quality == 1) then
-            if (itemClassId == LE_ITEM_CLASS_ARMOR) then
-                if ((itemSubClassId == LE_ITEM_ARMOR_CLOTH) or (itemSubClassId == LE_ITEM_ARMOR_LEATHER) or (itemSubClassId == LE_ITEM_ARMOR_MAIL) or (itemSubClassId == LE_ITEM_ARMOR_PLATE)) then
+            if (itemClassId == Enum.ItemClass.Armor) then
+                if ((itemSubClassId == Enum.ItemArmorSubclass.Cloth) or (itemSubClassId == Enum.ItemArmorSubclass.Leather) or (itemSubClassId == Enum.ItemArmorSubclass.Mail) or (itemSubClassId == Enum.ItemArmorSubclass.Plate)) then
                     if ((equipSlot ~= "INVTYPE_TABARD") and (equipSlot ~= "INVTYPE_SHIRT")) then
                         return true, L["QUICKVENDOR_REASON_WHITEGEAR"], "Common (white) armor";
                     end
                 end
-            elseif (itemClassId == LE_ITEM_CLASS_WEAPON) then
-                if ((itemSubClassId ~= LE_ITEM_WEAPON_GENERIC) and (itemSubClassId ~= LE_ITEM_WEAPON_FISHINGPOLE)) then
+            elseif (itemClassId == Enum.ItemClass.Weapon) then
+                if ((itemSubClassId ~= Enum.ItemWeaponSubclass.Generic) and (itemSubClassId ~= Enum.ItemWeaponSubclass.Fishingpole)) then
                     return true, L["QUICKVENDOR_REASON_WHITEGEAR"], "Common (white) weapon";
                 end
             end
@@ -227,7 +227,7 @@ function ExtVendor_IsItemQuickVendor(bag, bagSlot, link, quality, itemLevel, ite
             end
         end
         -- *** Outdated gear ***
-        if (((quality == 3) or (quality == 4)) and ((itemClassId == LE_ITEM_CLASS_ARMOR) or (itemClassId == LE_ITEM_CLASS_WEAPON)) and (equipSlot ~= "")) then
+        if (((quality == 3) or (quality == 4)) and ((itemClassId == Enum.ItemClass.Armor) or (itemClassId == Enum.ItemClass.Weapon)) and (equipSlot ~= "")) then
             if (EXTVENDOR_DATA['config']['quickvendor_oldgear']) then
                 -- always ignore items from the account's expansion level (or higher)
                 if (expacID < GetAccountExpansionLevel()) then
