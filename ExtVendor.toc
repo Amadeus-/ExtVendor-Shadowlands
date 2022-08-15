@@ -1,8 +1,8 @@
-## Interface: 90105
+## Interface: 90205
 ## Title: Extended Vendor UI |cffffffffv1.8.8
 ## Notes: Extends the merchant interface for easier browsing.
 ## Author: Germbread
-## Version: 1.9.0
+## Version: 1.9.1
 ## SavedVariables: EXTVENDOR_DATA
 ## X-Email: germbread@gmail.com
 
