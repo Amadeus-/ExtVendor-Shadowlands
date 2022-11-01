@@ -1,8 +1,8 @@
 --- **AceLocale-3.0** manages localization in addons, allowing for multiple locale to be registered with fallback to the base locale for untranslated strings.
 -- @class file
 -- @name AceLocale-3.0
--- @release $Id: AceLocale-3.0.lua 1005 2011-01-29 14:19:43Z mikk $
-local MAJOR,MINOR = "AceLocale-3.0", 5
+-- @release $Id: AceLocale-3.0.lua 1035 2011-07-09 03:20:13Z kaelten $
+local MAJOR,MINOR = "AceLocale-3.0", 6
 
 local AceLocale, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 
@@ -10,7 +10,7 @@ if not AceLocale then return end -- no upgrade needed
 
 -- Lua APIs
 local assert, tostring, error = assert, tostring, error
-local setmetatable, rawset, rawget = setmetatable, rawset, rawget
+local getmetatable, setmetatable, rawset, rawget = getmetatable, setmetatable, rawset, rawget
 
 -- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
 -- List them here for Mikk's FindGlobals script
@@ -91,16 +91,16 @@ local writedefaultproxy = setmetatable({}, {
 -- L["string1"] = "Zeichenkette1"
 -- @return Locale Table to add localizations to, or nil if the current locale is not required.
 function AceLocale:NewLocale(application, locale, isDefault, silent)
-	
+
 	-- GAME_LOCALE allows translators to test translations of addons without having that wow client installed
 	local gameLocale = GAME_LOCALE or gameLocale
 
 	local app = AceLocale.apps[application]
-	
-	if silent and app then
+
+	if silent and app and getmetatable(app) ~= readmetasilent then
 		geterrorhandler()("Usage: NewLocale(application, locale[, isDefault[, silent]]): 'silent' must be specified for the first locale registered")
 	end
-	
+
 	if not app then
 		if silent=="raw" then
 			app = {}
@@ -110,13 +110,13 @@ function AceLocale:NewLocale(application, locale, isDefault, silent)
 		AceLocale.apps[application] = app
 		AceLocale.appnames[app] = application
 	end
-	
+
 	if locale ~= gameLocale and not isDefault then
 		return -- nop, we don't need these translations
 	end
 	
 	registering = app -- remember globally for writeproxy and writedefaultproxy
-	
+
 	if isDefault then
 		return writedefaultproxy
 	end
