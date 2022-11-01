@@ -544,7 +544,7 @@ function ExtVendor_UpdateMerchantInfo(isPageScroll)
 		merchantAltCurrency = _G["MerchantItem" .. i .. "AltCurrencyFrame"];
         if (index <= visibleMerchantItems) then
 			name, texture, price, quantity, numAvailable, isPurchasable, isUsable, extendedCost = unpackMerchantItemInfo(merchantItemInfo[indexes[index]]);
-			--name, texture, price, quantity, numAvailable, isPurchasable, isUsable, extendedCost = GetMerchantItemInfo(indexes[index]);
+			name, texture, price, quantity, numAvailable, isPurchasable, isUsable, extendedCost = GetMerchantItemInfo(indexes[index]);
             if (name ~= nil) then
 			    _G["MerchantItem"..i.."Name"]:SetText(name);
 			    SetItemButtonCount(itemButton, quantity);
