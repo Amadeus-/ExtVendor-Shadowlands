@@ -1,7 +1,7 @@
 EXTVENDOR_DATA = {};
 EXTVENDOR = {
     Version = GetAddOnMetadata("ExtVendor", "Version"),
-    VersionID = 10900,
+    VersionID = 10902,
     ItemsPerSubpage = MERCHANT_ITEMS_PER_PAGE,
     SubpagesPerPage = 2,
     Hooks = {},
