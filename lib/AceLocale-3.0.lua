@@ -56,10 +56,10 @@ local writeproxy = setmetatable({}, {
 	__index = assertfalse
 })
 
--- This metatable proxy is used when registering the default locale. 
+-- This metatable proxy is used when registering the default locale.
 -- It refuses to overwrite existing values
 -- Reason 1: Allows loading locales in any order
--- Reason 2: If 2 modules have the same string, but only the first one to be 
+-- Reason 2: If 2 modules have the same string, but only the first one to be
 --           loaded has a translation for the current locale, the translation
 --           doesn't get overwritten.
 --
@@ -114,7 +114,7 @@ function AceLocale:NewLocale(application, locale, isDefault, silent)
 	if locale ~= gameLocale and not isDefault then
 		return -- nop, we don't need these translations
 	end
-	
+
 	registering = app -- remember globally for writeproxy and writedefaultproxy
 
 	if isDefault then

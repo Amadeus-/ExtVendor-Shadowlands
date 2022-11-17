@@ -34,7 +34,7 @@ function ExtVendor_StartQuickVendorRefresh()
     REFRESH_CURRENT_BAG = 0;
     REFRESH_CURRENT_SLOT = 1;
     NUM_BLACKLISTED_JUNK = 0;
-    REFRESH_SLOTS_IN_BAG = GetContainerNumSlots(REFRESH_CURRENT_BAG);
+    REFRESH_SLOTS_IN_BAG = C_Container.GetContainerNumSlots(REFRESH_CURRENT_BAG);
     EXTVENDOR.QuickVendor.CurrentJunkList = {};
     EXTVENDOR.QuickVendor.InventoryDetail = {};
     EXTVENDOR.RefreshingQuickVendorList = true;
@@ -47,7 +47,7 @@ function ExtVendor_DoQuickVendorRefresh()
     while true do
         if (processed >= 20) then break; end
         if (REFRESH_CURRENT_SLOT <= REFRESH_SLOTS_IN_BAG) then
-            __, count = GetContainerItemInfo(REFRESH_CURRENT_BAG, REFRESH_CURRENT_SLOT);
+            __, count = C_Container.GetContainerItemInfo(REFRESH_CURRENT_BAG, REFRESH_CURRENT_SLOT);
             if (count) then
                 isJunk, junkInfo, isBlacklisted, detail = ExtVendor_IsContainerItemJunk(REFRESH_CURRENT_BAG, REFRESH_CURRENT_SLOT);
                 if (isJunk) then
@@ -67,7 +67,7 @@ function ExtVendor_DoQuickVendorRefresh()
         if (REFRESH_CURRENT_SLOT > REFRESH_SLOTS_IN_BAG) then
             REFRESH_CURRENT_SLOT = 1;
             REFRESH_CURRENT_BAG = REFRESH_CURRENT_BAG + 1;
-            REFRESH_SLOTS_IN_BAG = GetContainerNumSlots(REFRESH_CURRENT_BAG);
+            REFRESH_SLOTS_IN_BAG = C_Container.GetContainerNumSlots(REFRESH_CURRENT_BAG);
         end
         if (REFRESH_CURRENT_BAG > 4) then
             ExtVendor_StopQuickVendorRefresh();
@@ -101,17 +101,18 @@ function ExtVendor_StartQuickVendor(self)
 end
 
 function ExtVendor_IsContainerItemJunk(bag, slot)
-    local __, count = GetContainerItemInfo(bag, slot);
+    local __, count = C_Container.GetContainerItemInfo(bag, slot);
     local iDetail;
     if (count) then
-        local link = GetContainerItemLink(bag, slot);
+        local link = C_Container.GetContainerItemLink(bag, slot);
         if (link) then
             local isKnown, reqClasses, itemId, isAccountBound, isFoodOrDrink = ExtVendor_GetExtendedItemInfo(link);
-            local name, __, quality, itemLevel, itemReqLevel, itemType, itemSubType, maxStack, itemEquipLoc, __, price, itemClassId, itemSubClassId, bindType, expacID = GetItemInfo(link);
+			local itemName, __, itemQuality, itemLevel, itemReqLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, sellPrice, classID, subclassID, bindType, expacID, setID, isCraftingReagent = GetItemInfo(item) 
+            --local name, __, itemQuality, itemLevel, itemReqLevel, itemType, itemSubType, maxStack, itemEquipLoc, __, price, itemClassId, itemSubClassId, bindType, expacID = GetItemInfo(link);
             
             -- make sure the item has a vendor price
             if ((price or 0) > 0) then
-                local isJunk, reason, detail = ExtVendor_IsItemQuickVendor(bag, slot, link, quality, itemLevel, itemReqLevel, bindType, isKnown, itemClassId, itemSubClassId, itemEquipLoc, reqClasses, isAccountBound, expacID, isFoodOrDrink);
+                local isJunk, reason, detail = ExtVendor_IsItemQuickVendor(bag, slot, link, itemQuality, itemLevel, itemReqLevel, bindType, isKnown, classId, subClassId, itemEquipLoc, reqClasses, isAccountBound, expacID, isFoodOrDrink);
                 
                 if (detail) then
                     iDetail = { link = link, isJunk = isJunk, reason = detail };
@@ -249,7 +250,7 @@ end
 -- Performs quick-vendor
 --========================================
 function ExtVendor_ConfirmQuickVendor()
-    local link, count, name, color, quality, itemLevel, itemReqLevel, price, maxStack, quantity, bindType, expacID, itemType, itemSubType, itemClassId, itemSubClassId, itemEquipLoc, __;
+    local link, count, itemName, color, itemQuality, itemLevel, itemMinLevel, sellPrice, itemStackCount, quantity, bindType, expacID, itemType, itemSubType, classId, subClassId, itemEquipLoc, itemTexture, setID, isCraftingReagent, __;
     local isKnown, reqClasses, itemId, isAccountBound, isFoodOrDrink;
     local bag, slot;
     local totalPrice = 0;
@@ -273,22 +274,23 @@ function ExtVendor_ConfirmQuickVendor()
     -- otherwise just do it the old way
     for bag = 0, 4, 1 do
         if (GetContainerNumSlots(bag)) then
-            for slot = 1, GetContainerNumSlots(bag), 1 do
-                __, count = GetContainerItemInfo(bag, slot);
-                link = GetContainerItemLink(bag, slot);
+            for slot = 1, C_Container.GetContainerNumSlots(bag), 1 do
+                __, count = C_Container.GetContainerItemInfo(bag, slot);
+                link = C_Container.GetContainerItemLink(bag, slot);
                 if (link and count) then
-                    name, __, quality, itemLevel, itemReqLevel, itemType, itemSubType, maxStack, itemEquipLoc, __, price, itemClassId, itemSubClassId, bindType, expacID = GetItemInfo(link);
+					itemName, __, itemQuality, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, sellPrice, classID, subclassID, bindType, expacID, setID, isCraftingReagent = GetItemInfo(item) 
+                    --name, __, quality, itemLevel, itemReqLevel, itemType, itemSubType, maxStack, itemEquipLoc, __, price, itemClassId, subClassId, bindType, expacID = GetItemInfo(link) 
                     isKnown, reqClasses, itemId, isAccountBound, isFoodOrDrink = ExtVendor_GetExtendedItemInfo(link);
 
-                    if ((price or 0) > 0) then
-                        if (ExtVendor_IsItemQuickVendor(bag, slot, link, quality, itemLevel, itemReqLevel, bindType, isKnown, itemClassId, itemSubClassId, itemEquipLoc, reqClasses, isAccountBound, expacID, isFoodOrDrink)) then
-                            PickupContainerItem(bag, slot);
-                            PickupMerchantItem(0);
-                            __, __, __, color = GetItemQualityColor(quality);
+                    if ((sellPrice or 0) > 0) then
+                        if (ExtVendor_IsItemQuickVendor(bag, slot, link, itemQ, itemLevel, itemMinLevel, bindType, isKnown, classId, subClassId, itemEquipLoc, reqClasses, isAccountBound, expacID, isFoodOrDrink)) then
+                            C_Container.PickupContainerItem(bag, slot);
+                            C_Container.PickupMerchantItem(0);
+                            __, __, __, color = GetItemQualityColor(itemQ);
                             if (itemsOnLine > 0) then
                                 itemsSold = itemsSold .. ", ";
                             end
-                            if (maxStack > 1) then
+                            if (itemStackCount > 1) then
                                 quantity = "x" .. count;
                             else
                                 quantity = "";
@@ -301,7 +303,7 @@ function ExtVendor_ConfirmQuickVendor()
                                 itemsSold = "";
                                 itemsOnLine = 0;
                             end
-                            totalPrice = totalPrice + (price * count);
+                            totalPrice = totalPrice + (sellPrice * count);
                             numItemsSold = numItemsSold + 1;
                         end
                     end
@@ -311,7 +313,7 @@ function ExtVendor_ConfirmQuickVendor()
     end
 
     if (numItemsSold > 0) then
-        DEFAULT_CHAT_FRAME:AddMessage(ExtVendor_FormatString(L["SOLD_COMPACT"], { ["count"] = numItemsSold, ["price"] = "|cffffffff" .. ExtVendor_FormatMoneyString(totalPrice) }), ChatTypeInfo["SYSTEM"].r, ChatTypeInfo["SYSTEM"].g, ChatTypeInfo["SYSTEM"].b, GetChatTypeIndex("SYSTEM"));
+        DEFAULT_CHAT_FRAME:AddMessage(ExtVendor_FormatString(L["SOLD_COMPACT"], { ["count"] = numItemsSold, ["sellPrice"] = "|cffffffff" .. ExtVendor_FormatMoneyString(totalPrice) }), ChatTypeInfo["SYSTEM"].r, ChatTypeInfo["SYSTEM"].g, ChatTypeInfo["SYSTEM"].b, GetChatTypeIndex("SYSTEM"));
     end
 end
 
@@ -334,7 +336,7 @@ function ExtVendor_ProgressQuickVendor()
         return nil;
     end
     
-    local link, count, name, color, quality, itemLevel, itemReqLevel, price, maxStack, quantity, bindType, expacID, itemType, itemSubType, itemEquipLoc, itemClassId, itemSubClassId, __;
+    local link, count, itemName, color, itemQuality, itemLevel, itemMinLevel, sellPrice, itemStackCount, quantity, bindType, expacID, itemType, itemSubType, itemEquipLoc, classId, subClassId, itemTexture, setID, isCraftingReagent, __;
     local isKnown, reqClasses, itemId, isAccountBound, isFoodOrDrink;
     local bag, slot;
     local totalPrice = 0;
@@ -346,34 +348,35 @@ function ExtVendor_ProgressQuickVendor()
     local CANCEL = false;
     
     for bag = 0, 4, 1 do
-        if (GetContainerNumSlots(bag)) then
-            for slot = 1, GetContainerNumSlots(bag), 1 do
+        if (C_Container.GetContainerNumSlots(bag)) then
+            for slot = 1, C_Container.GetContainerNumSlots(bag), 1 do
             
                 if (not CANCEL) then
 
-                    __, count, locked = GetContainerItemInfo(bag, slot);
+                    __, itemCount, locked = C_Container.GetContainerItemInfo(bag, slot);
                     if (not locked) then
                         link = GetContainerItemLink(bag, slot);
                         if (link and count) then
-                            name, __, quality, itemLevel, itemReqLevel, itemType, itemSubType, maxStack, itemEquipLoc, __, price, itemClassId, itemSubClassId, bindType, expacID = GetItemInfo(link);
+							itemName, __, itemQuality, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, sellPrice, classID, subclassID, bindType, expacID, setID, isCraftingReagent = GetItemInfo(item) 
+                            --name, __, quality, itemLevel, itemReqLevel, itemType, itemSubType, maxStack, itemEquipLoc, __, price, itemClassId, itemSubClassId, bindType, expacID = C_Container.GetItemInfo(link);
                             isKnown, reqClasses, itemId, isAccountBound, isFoodOrDrink = ExtVendor_GetExtendedItemInfo(link);
 
-                            if ((price or 0) > 0) then
-                                if (ExtVendor_IsItemQuickVendor(bag, slot, link, quality, itemLevel, itemReqLevel, bindType, isKnown, itemClassId, itemSubClassId, itemEquipLoc, reqClasses, isAccountBound, expacID, isFoodOrDrink)) then
-                                    PickupContainerItem(bag, slot);
+                            if ((sellPrice or 0) > 0) then
+                                if (ExtVendor_IsItemQuickVendor(bag, slot, link, itemQuality, itemLevel, itemMinLevel, bindType, isKnown, classId, subClassId, itemEquipLoc, reqClasses, isAccountBound, expacID, isFoodOrDrink)) then
+                                    C_Container.PickupContainerItem(bag, slot);
                                     PickupMerchantItem(0);
-                                    __, __, __, color = GetItemQualityColor(quality);
+                                    __, __, __, color = GetItemQualityColor(itemQuality);
                                     if (itemsOnLine > 0) then
                                         itemsSold = itemsSold .. ", ";
                                     end
-                                    if (maxStack > 1) then
+                                    if (itemStackCount > 1) then
                                         quantity = "x" .. count;
                                     else
                                         quantity = "";
                                     end
-                                    itemsSold = itemsSold .. "|c" .. color .. "[" .. name .. "]|r" .. quantity;
+                                    itemsSold = itemsSold .. "|c" .. color .. "[" .. itemName .. "]|r" .. quantity;
                                     itemsOnLine = itemsOnLine + 1;
-                                    totalPrice = totalPrice + (price * count);
+                                    totalPrice = totalPrice + (sellPrice * count);
                                     numItemsSold = numItemsSold + 1;
                                     
                                     if (numItemsSold >= SELL_ITEM_GROUP_SIZE) then CANCEL = true; end
