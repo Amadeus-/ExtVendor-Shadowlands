@@ -30,7 +30,9 @@ function ExtVendorConfig_About_OnLoad(self)
 
     ExtVendorConfigAboutTitle:SetText(string.format(L["VERSION_TEXT"], "|cffffffffv" .. EXTVENDOR.Version));
     ExtVendorConfigAboutAuthor:SetText(L["LABEL_AUTHOR"] .. ": |cffffffff" .. ABOUT.author);
-    ExtVendorConfigAboutEmail:SetText(L["LABEL_EMAIL"] .. ": |cffffffff" .. ABOUT.email);
+    if (ABOUT.email) then
+        ExtVendorConfigAboutEmail:SetText(L["LABEL_EMAIL"] .. ": |cffffffff" .. ABOUT.email);
+    end
     ExtVendorConfigAboutURLs:SetText(L["LABEL_HOSTS"] .. ":");
     
     ExtVendorConfigAboutTranslatorsHeader:SetText(L["TRANSLATORS"]);
