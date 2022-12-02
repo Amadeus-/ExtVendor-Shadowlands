@@ -1,10 +1,9 @@
-## Interface: 90205
-## Title: Extended Vendor UI |cffffffffv1.8.8
+## Interface: 100002
+## Title: Extended Vendor UI for DragonFlight |cffffffffv10.0
 ## Notes: Extends the merchant interface for easier browsing.
-## Author: Germbread
-## Version: 1.9.1
+## Author: Naquadah (original author), Amadeus (maintainer), Germbread (maintainer)
+## Version: 10.0
 ## SavedVariables: EXTVENDOR_DATA
-## X-Email: germbread@gmail.com
 
 lib\LibStub.lua
 lib\AceLocale-3.0.lua

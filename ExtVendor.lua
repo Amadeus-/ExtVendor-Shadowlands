@@ -400,8 +400,10 @@ function ExtVendor_UpdateMerchantInfo(isPageScroll)
     ExtVendor_UpdateButtonPositions();
 
     -- set title and portrait
-	MerchantNameText:SetText(UnitName("NPC"));
-	SetPortraitTexture(MerchantFramePortrait, "NPC");
+	--MerchantNameText:SetText(UnitName("NPC"));
+	--SetPortraitTexture(MerchantFramePortrait, "NPC");
+	MerchantFrame:SetTitle(UnitName("npc"));
+	MerchantFrame:SetPortraitToUnit("npc");
 
     -- locals
     local totalMerchantItems = GetMerchantNumItems();
