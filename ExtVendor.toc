@@ -1,5 +1,5 @@
 ## Interface: 100002
-## Title: Extended Vendor UI for DragonFlight |cffffffffv10.0
+## Title: Extended Vendor UI
 ## Notes: Extends the merchant interface for easier browsing.
 ## Author: Naquadah (original author), Amadeus (maintainer), Germbread (maintainer)
 ## Version: 10.0
